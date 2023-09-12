@@ -4,6 +4,7 @@ use sqlx::QueryBuilder;
 
 #[derive(Debug, Clone, serde::Serialize, serde::Deserialize)]
 pub struct UpdateHousehold {
+    #[serde(default = "Default::default")]
     pub id: i64,
     pub address: Option<String>,
 }
@@ -29,8 +30,8 @@ impl Repo {
 
 #[cfg(test)]
 mod test {
-    use crate::prelude::*;
     use super::*;
+    use crate::prelude::*;
 
     #[tokio::test]
     async fn update() -> Result<()> {

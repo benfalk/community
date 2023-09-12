@@ -5,8 +5,8 @@ mod error;
 mod prelude;
 mod utils;
 
-pub mod repo;
 pub mod models;
+pub mod repo;
 pub use error::Error;
 pub use repo::Repo;
 

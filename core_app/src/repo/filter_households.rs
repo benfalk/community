@@ -10,7 +10,12 @@ use std::num::NonZeroU32;
 #[derive(Debug, Clone, serde::Serialize, serde::Deserialize, Default)]
 pub struct FilterHouseholds {
     pub page: Option<NonZeroU32>,
+    #[serde(default = "default_page_size")]
     pub per_page: u8,
+}
+
+fn default_page_size() -> u8 {
+    20
 }
 
 impl FilterHouseholds {
@@ -125,20 +130,26 @@ async fn add_members_to_households(repo: &Repo, households: &mut Vec<Household>)
 
 #[cfg(test)]
 mod test {
-    use crate::prelude::*;
     use super::*;
+    use crate::prelude::*;
 
     #[tokio::test]
     async fn filter() -> Result<()> {
         let repo = Repo::in_memory().await?;
 
-        sqlx::query!("INSERT INTO households (address) VALUES (?)", "OCP Main Building")
-            .execute(&repo.0)
-            .await?;
+        sqlx::query!(
+            "INSERT INTO households (address) VALUES (?)",
+            "OCP Main Building"
+        )
+        .execute(&repo.0)
+        .await?;
 
-        sqlx::query!("INSERT INTO households (address) VALUES (?)", "Detroit Police Office")
-            .execute(&repo.0)
-            .await?;
+        sqlx::query!(
+            "INSERT INTO households (address) VALUES (?)",
+            "Detroit Police Office"
+        )
+        .execute(&repo.0)
+        .await?;
 
         add_member(&repo, 1, "Dick", "Jones").await?;
         add_member(&repo, 2, "Alex", "Murphy").await?;

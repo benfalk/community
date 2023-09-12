@@ -1,8 +1,9 @@
 use super::Repo;
 use crate::{models::HouseholdMember, prelude::*};
 
-#[derive(Debug, Clone, serde::Serialize, serde::Deserialize)]
+#[derive(Debug, Clone, serde::Serialize, serde::Deserialize, Default)]
 pub struct CreateHouseholdMember {
+    #[serde(default = "Default::default")]
     pub household_id: i64,
     pub first_name: String,
     pub last_name: String,
@@ -56,9 +57,12 @@ mod test {
     #[tokio::test]
     async fn create() -> Result<()> {
         let repo = Repo::in_memory().await?;
-        sqlx::query!("INSERT INTO households (address) VALUES (?)", "OCP Main Building")
-            .execute(&repo.0)
-            .await?;
+        sqlx::query!(
+            "INSERT INTO households (address) VALUES (?)",
+            "OCP Main Building"
+        )
+        .execute(&repo.0)
+        .await?;
         let create = CreateHouseholdMember {
             household_id: 1,
             first_name: "Alex".to_owned(),

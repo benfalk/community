@@ -6,10 +6,12 @@ mod create_household_member;
 mod delete_household;
 mod delete_household_member;
 mod fetch_household;
+mod fetch_household_member;
 mod filter_households;
 mod update_household;
 mod update_household_member;
 
+#[derive(Debug, Clone)]
 pub struct Repo(SqlitePool);
 pub use create_household::CreateHousehold;
 pub use create_household_member::CreateHouseholdMember;

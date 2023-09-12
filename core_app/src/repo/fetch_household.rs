@@ -64,9 +64,12 @@ mod test {
     async fn fetch() -> Result<()> {
         let repo = Repo::in_memory().await?;
 
-        sqlx::query!("INSERT INTO households (address) VALUES (?)", "OCP Main Building")
-            .execute(&repo.0)
-            .await?;
+        sqlx::query!(
+            "INSERT INTO households (address) VALUES (?)",
+            "OCP Main Building"
+        )
+        .execute(&repo.0)
+        .await?;
 
         sqlx::query!(
             "

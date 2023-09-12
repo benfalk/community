@@ -11,9 +11,7 @@ impl<T: Sized> SplitWhileTrait for Vec<T> {
     where
         P: Fn(&Self::Item) -> bool,
     {
-        self.split_off(
-            self.len() - self.iter().rev().take_while(|i| predicate(i)).count()
-        )
+        self.split_off(self.len() - self.iter().rev().take_while(|i| predicate(i)).count())
     }
 }
 

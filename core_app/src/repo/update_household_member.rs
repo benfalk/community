@@ -4,6 +4,7 @@ use sqlx::QueryBuilder;
 
 #[derive(Debug, Clone, serde::Serialize, serde::Deserialize, Default)]
 pub struct UpdateHouseholdMember {
+    #[serde(default = "Default::default")]
     pub id: i64,
     pub household_id: Option<i64>,
     pub first_name: Option<String>,
@@ -13,10 +14,7 @@ pub struct UpdateHouseholdMember {
 }
 
 impl Repo {
-    pub async fn update_household_member(
-        &self,
-        update: &UpdateHouseholdMember,
-    ) -> Result<()> {
+    pub async fn update_household_member(&self, update: &UpdateHouseholdMember) -> Result<()> {
         let mut builder = QueryBuilder::new("UPDATE household_members SET ");
         let mut separator = builder.separated(", ");
 
@@ -64,16 +62,19 @@ impl Repo {
 
 #[cfg(test)]
 mod test {
-    use crate::prelude::*;
     use super::*;
+    use crate::prelude::*;
 
     #[tokio::test]
     async fn update() -> Result<()> {
         let repo = Repo::in_memory().await?;
 
-        sqlx::query!("INSERT INTO households (address) VALUES (?)", "OCP Main Building")
-            .execute(&repo.0)
-            .await?;
+        sqlx::query!(
+            "INSERT INTO households (address) VALUES (?)",
+            "OCP Main Building"
+        )
+        .execute(&repo.0)
+        .await?;
 
         sqlx::query!(
             "
@@ -100,7 +101,9 @@ mod test {
         };
 
         repo.update_household_member(&update).await?;
-        let row = sqlx::query!("SELECT email, cell_number FROM household_members WHERE id = 1").fetch_one(&repo.0).await?;
+        let row = sqlx::query!("SELECT email, cell_number FROM household_members WHERE id = 1")
+            .fetch_one(&repo.0)
+            .await?;
         assert_eq!(row.email.unwrap(), "d.jones@ocp.com");
         assert_eq!(row.cell_number.unwrap(), "555-5555");
         Ok(())

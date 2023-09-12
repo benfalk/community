@@ -33,8 +33,8 @@ impl Repo {
 
 #[cfg(test)]
 mod test {
-    use crate::prelude::*;
     use super::*;
+    use crate::prelude::*;
 
     #[tokio::test]
     async fn create() -> Result<()> {

@@ -1,9 +1,10 @@
-use crate::prelude::*;
 use super::*;
+use crate::prelude::*;
 
 impl Repo {
     pub async fn delete_household(&self, id: i64) -> Result<()> {
-        sqlx::query!("
+        sqlx::query!(
+            "
             DELETE FROM households
             WHERE id = ?
             RETURNING id
@@ -18,15 +19,18 @@ impl Repo {
 
 #[cfg(test)]
 mod test {
-    use crate::prelude::*;
     use super::*;
+    use crate::prelude::*;
 
     #[tokio::test]
     async fn delete() -> Result<()> {
         let repo = Repo::in_memory().await?;
-        sqlx::query!("INSERT INTO households (address) VALUES (?)", "OCP Main Building")
-            .execute(&repo.0)
-            .await?;
+        sqlx::query!(
+            "INSERT INTO households (address) VALUES (?)",
+            "OCP Main Building"
+        )
+        .execute(&repo.0)
+        .await?;
         sqlx::query!(
             "
             INSERT INTO household_members
