@@ -4,6 +4,8 @@ use core_app::Repo;
 
 mod create_household;
 mod create_member;
+mod delete_household;
+mod delete_member;
 mod filter_households;
 mod update_household;
 mod update_member;
@@ -17,9 +19,14 @@ pub async fn routes() -> Result<Router> {
         .route("/households", routing::post(create_household::handler))
         .route("/households/:id", routing::post(update_household::handler))
         .route(
+            "/households/:id",
+            routing::delete(delete_household::handler),
+        )
+        .route(
             "/households/:id/members",
             routing::post(create_member::handler),
         )
         .route("/members/:id", routing::post(update_member::handler))
+        .route("/members/:id", routing::delete(delete_household::handler))
         .with_state(repo))
 }
