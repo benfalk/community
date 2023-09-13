@@ -1,5 +1,8 @@
 use crate::prelude::*;
-use axum::{routing, Router};
+use axum::{
+    routing::{delete, get, post},
+    Router,
+};
 use core_app::Repo;
 
 mod create_household;
@@ -15,18 +18,12 @@ pub async fn routes() -> Result<Router> {
     let repo = Repo::in_memory().await?;
 
     Ok(Router::new()
-        .route("/households", routing::get(filter_households::handler))
-        .route("/households", routing::post(create_household::handler))
-        .route("/households/:id", routing::post(update_household::handler))
-        .route(
-            "/households/:id",
-            routing::delete(delete_household::handler),
-        )
-        .route(
-            "/households/:id/members",
-            routing::post(create_member::handler),
-        )
-        .route("/members/:id", routing::post(update_member::handler))
-        .route("/members/:id", routing::delete(delete_household::handler))
+        .route("/households", get(filter_households::handler))
+        .route("/households", post(create_household::handler))
+        .route("/households/:id", post(update_household::handler))
+        .route("/households/:id", delete(delete_household::handler))
+        .route("/households/:id/members", post(create_member::handler))
+        .route("/members/:id", post(update_member::handler))
+        .route("/members/:id", delete(delete_household::handler))
         .with_state(repo))
 }
