@@ -17,6 +17,7 @@ pub enum Error {
 
 impl IntoResponse for Error {
     fn into_response(self) -> axum::response::Response {
-        (StatusCode::INTERNAL_SERVER_ERROR, "shit's broke yo").into_response()
+        let err = format!("{self:#?}");
+        (StatusCode::INTERNAL_SERVER_ERROR, err).into_response()
     }
 }

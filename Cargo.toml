@@ -3,4 +3,5 @@ resolver = "2"
 members = [
 	"core_app",
 	"web_backend",
+	"web_frontend",
 ]

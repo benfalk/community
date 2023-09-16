@@ -3,7 +3,8 @@ name = "web_backend"
 version = "0.1.0"
 edition = "2021"
 
-# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+# See more keys and their definitions at:
+#   https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
 thiserror = { version = "1" }
@@ -11,3 +12,6 @@ tokio = { version = "1", features = ["full"] }
 axum = { version = "0.6.0" }
 hyper = { version = "0.14" }
 core_app = { path = "../core_app" }
+rust-embed = { version = "8.0.0" }
+mime_guess = { version = "2.0.0" }
+lazy_static = { version = "1.4" }
