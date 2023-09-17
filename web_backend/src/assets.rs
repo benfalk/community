@@ -27,7 +27,12 @@ where
             Some(content) => {
                 // FIXME: Set caching headers where appropriate
                 let mime = mime_guess::from_path(path).first_or_octet_stream();
-                ([(header::CONTENT_TYPE, mime.as_ref())], content.data).into_response()
+                ([
+                    (header::CONTENT_TYPE, mime.as_ref()),
+                    (header::CACHE_CONTROL, "max-age=604800"),
+                ],
+                    content.data
+                ).into_response()
             }
             None => {
                 let index =

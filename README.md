@@ -46,3 +46,17 @@ Simple application to keep track of your local community
   ```
   cargo build --release
   ```
+
+### Live Rebuilding in Dev
+
+1. Rebuild the FE
+
+  ```
+  trunk watch web_frontend/index.html
+  ```
+
+2. Rebuild and run the BE
+
+  ```
+  cargo watch -c -q -w core_app/ -w web_backend/ -x 'run --bin web_backend'
+  ```

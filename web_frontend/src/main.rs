@@ -1,8 +1,12 @@
+#![allow(dead_code)]
+
+mod routes;
+mod components;
+
 use yew::prelude::*;
 use yew_router::prelude::*;
-mod router;
-
-use router::Route;
+use routes::Route;
+use components::Households;
 
 #[function_component(App)]
 fn app() -> Html {
@@ -15,11 +19,9 @@ fn app() -> Html {
 
 fn switch(route: Route) -> Html {
     match route {
-        Route::Home => html! {
-            <h1>{ "Hello World!!" }</h1>
-        },
+        Route::Home => html! { <Households /> },
         Route::NotFound => html! {
-            <h1>{ "Not Found Bro" }</h1>
+            <h1>{ "Not Found!!!" }</h1>
         },
     }
 }
