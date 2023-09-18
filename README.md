@@ -24,6 +24,12 @@ Simple application to keep track of your local community
   cargo install --locked trunk
   ```
 
+* Rust WASM build support
+
+  ```
+  rustup target add wasm32-unknown-unknown
+  ```
+
 ### Building the Project
 
 1. Create the database
