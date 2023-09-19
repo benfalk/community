@@ -14,7 +14,6 @@ pub fn create_household(props: &Props) -> Html {
     let callbk = props.afterclbk.clone();
 
     let address = use_state(String::new);
-    // Nimon
 
     let add_household: UseAsyncHandle<Household, ()> = {
         let address = address.clone();
@@ -41,9 +40,13 @@ pub fn create_household(props: &Props) -> Html {
     };
 
     html! {
-        <div>
-            <input {onkeypress} />
-        </div>
+        <input
+            class={"form-control form-control-lg"}
+            type={"text"}
+            placeholder={"Add Household Address"}
+            aria-label={"Add Household Address"}
+            {onkeypress}
+        />
     }
 }
 

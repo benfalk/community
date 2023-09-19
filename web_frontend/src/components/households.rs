@@ -24,30 +24,35 @@ pub fn households() -> Html {
     };
 
     html! {
-        <>
-            <h1>{ "Households" }</h1>
+        <div class={"container"}>
+            <div class={"row"}>
+                <div class={"col"}>
+                    <CreateHousehold {afterclbk} />
+                </div>
+            </div>
+            <div class={"row"}>
             {
                 match &state.data {
                     Some(data) => html! {
-                        <>
-                            <ul>
+                        <div class={"col"}>
+                            <ul class={"list-group"}>
                             {
                                 data.results.iter().map(|r| {
-                                    html! { <li>{ r.address.clone() }</li> }
+                                    html! { <li class={"list-group-item list-group-item-light"}>{ r.address.clone() }</li> }
                                 }).collect::<Html>()
                             }
                             </ul>
-                            <CreateHousehold {afterclbk} />
-                        </>
+                        </div>
                     },
                     None => html!{ "Loading..." }
                 }
             }
-        </>
+            </div>
+        </div>
     }
 }
 
-#[derive(Debug, serde::Deserialize, Clone)]
+#[derive(Debug, serde::Deserialize, Clone, PartialEq)]
 pub struct Household {
     id: i64,
     address: String,
