@@ -9,5 +9,6 @@ pub async fn handler(
     State(repo): State<Repo>,
     Query(filters): Query<FilterHouseholds>,
 ) -> Result<Json<FilterHouseholdResults>> {
-    Ok(Json(repo.filter_households(&filters).await?))
+    let ctx = core_app::Context::as_root();
+    Ok(Json(repo.filter_households(&ctx, &filters).await?))
 }

@@ -3,7 +3,7 @@ use crate::{models::HouseholdMember, prelude::*};
 use sqlx::{sqlite::SqliteRow, Row};
 
 impl Repo {
-    pub async fn fetch_household_member(&self, id: i64) -> Result<HouseholdMember> {
+    pub async fn fetch_household_member(&self, _ctx: &Context, id: i64) -> Result<HouseholdMember> {
         let member = sqlx::query(
             "
             SELECT
@@ -40,6 +40,7 @@ mod test {
 
     #[tokio::test]
     async fn fetch() -> Result<()> {
+        let ctx = Context::as_root();
         let repo = Repo::in_memory().await?;
 
         sqlx::query!(
@@ -66,7 +67,7 @@ mod test {
         .execute(&repo.0)
         .await?;
 
-        let member = repo.fetch_household_member(1).await?;
+        let member = repo.fetch_household_member(&ctx, 1).await?;
         assert_eq!(member.household_id, 1);
         assert_eq!(member.id, 1);
         assert_eq!(member.first_name, "Dick");

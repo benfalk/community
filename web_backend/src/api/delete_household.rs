@@ -7,6 +7,7 @@ use axum::{
 use core_app::repo::Repo;
 
 pub async fn handler(State(repo): State<Repo>, Path(id): Path<i64>) -> Result<impl IntoResponse> {
-    repo.delete_household(id).await?;
+    let ctx = core_app::Context::as_root();
+    repo.delete_household(&ctx, id).await?;
     Ok(StatusCode::OK)
 }

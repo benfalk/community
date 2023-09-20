@@ -14,6 +14,7 @@ pub struct CreateHouseholdMember {
 impl Repo {
     pub async fn create_household_member(
         &self,
+        _ctx: &Context,
         create: &CreateHouseholdMember,
     ) -> Result<HouseholdMember> {
         let row = sqlx::query!(
@@ -56,6 +57,7 @@ mod test {
 
     #[tokio::test]
     async fn create() -> Result<()> {
+        let ctx = Context::as_root();
         let repo = Repo::in_memory().await?;
         sqlx::query!(
             "INSERT INTO households (address) VALUES (?)",
@@ -70,7 +72,7 @@ mod test {
             email: Some("amurphy@detroit-police.org".to_owned()),
             cell_number: Some("911".to_owned()),
         };
-        let member = repo.create_household_member(&create).await?;
+        let member = repo.create_household_member(&ctx, &create).await?;
         assert_eq!(member.id, 1);
         assert_eq!(member.first_name, "Alex");
         assert_eq!(member.last_name, "Murphy");

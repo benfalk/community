@@ -13,6 +13,7 @@ pub async fn handler(
     Path(id): Path<i64>,
     Json(mut create): Json<CreateHouseholdMember>,
 ) -> Result<Json<HouseholdMember>> {
+    let ctx = core_app::Context::as_root();
     create.household_id = id;
-    Ok(Json(repo.create_household_member(&create).await?))
+    Ok(Json(repo.create_household_member(&ctx, &create).await?))
 }

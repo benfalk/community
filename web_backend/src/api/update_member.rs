@@ -13,7 +13,8 @@ pub async fn handler(
     Path(id): Path<i64>,
     Json(mut update): Json<UpdateHouseholdMember>,
 ) -> Result<Json<HouseholdMember>> {
+    let ctx = core_app::Context::as_root();
     update.id = id;
-    repo.update_household_member(&update).await?;
-    Ok(Json(repo.fetch_household_member(id).await?))
+    repo.update_household_member(&ctx, &update).await?;
+    Ok(Json(repo.fetch_household_member(&ctx, id).await?))
 }

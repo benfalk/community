@@ -10,7 +10,7 @@ pub struct UpdateHousehold {
 }
 
 impl Repo {
-    pub async fn update_household(&self, update: &UpdateHousehold) -> Result<()> {
+    pub async fn update_household(&self, _ctx: &Context, update: &UpdateHousehold) -> Result<()> {
         let mut builder = QueryBuilder::new("UPDATE households SET ");
         let mut separator = builder.separated(", ");
 
@@ -35,6 +35,7 @@ mod test {
 
     #[tokio::test]
     async fn update() -> Result<()> {
+        let ctx = Context::as_root();
         let repo = Repo::in_memory().await?;
         let address = "Sour Lane".to_owned();
         sqlx::query!("INSERT INTO households (address) VALUES (?)", "Rofl Lane")
@@ -44,7 +45,7 @@ mod test {
             id: 1,
             address: Some(address.clone()),
         };
-        repo.update_household(&update).await?;
+        repo.update_household(&ctx, &update).await?;
         sqlx::query!(
             "
             SELECT id

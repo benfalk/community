@@ -37,6 +37,7 @@ pub struct FilterHouseholdResults {
 impl Repo {
     pub async fn filter_households(
         &self,
+        _ctx: &Context,
         filters: &FilterHouseholds,
     ) -> Result<FilterHouseholdResults> {
         let (mut results, has_next_page) = fetch_households_without_members(self, filters).await?;
@@ -135,6 +136,7 @@ mod test {
 
     #[tokio::test]
     async fn filter() -> Result<()> {
+        let ctx = Context::as_root();
         let repo = Repo::in_memory().await?;
 
         sqlx::query!(
@@ -161,7 +163,7 @@ mod test {
             page: NonZeroU32::new(1),
         };
 
-        let data = repo.filter_households(&filter).await?;
+        let data = repo.filter_households(&ctx, &filter).await?;
         assert_eq!(data.has_next_page, false);
         assert_eq!(data.results.len(), 2);
         assert_eq!(data.results[0].members.len(), 2);

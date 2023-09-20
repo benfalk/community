@@ -2,7 +2,7 @@ use super::*;
 use crate::prelude::*;
 
 impl Repo {
-    pub async fn delete_household_member(&self, id: i64) -> Result<()> {
+    pub async fn delete_household_member(&self, _ctx: &Context, id: i64) -> Result<()> {
         sqlx::query!(
             "
             DELETE FROM household_members
@@ -24,6 +24,7 @@ mod test {
 
     #[tokio::test]
     async fn delete() -> Result<()> {
+        let ctx = Context::as_root();
         let repo = Repo::in_memory().await?;
         sqlx::query!(
             "INSERT INTO households (address) VALUES (?)",
@@ -47,7 +48,7 @@ mod test {
         )
         .execute(&repo.0)
         .await?;
-        repo.delete_household_member(1).await?;
+        repo.delete_household_member(&ctx, 1).await?;
         sqlx::query!("SELECT id FROM households WHERE id = 1")
             .fetch_one(&repo.0)
             .await?;

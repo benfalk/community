@@ -6,7 +6,7 @@ use crate::{
 use sqlx::{sqlite::SqliteRow, Row};
 
 impl Repo {
-    pub async fn fetch_household(&self, id: i64) -> Result<Household> {
+    pub async fn fetch_household(&self, _ctx: &Context, id: i64) -> Result<Household> {
         let household_fetch = sqlx::query(
             "
             SELECT
@@ -62,6 +62,7 @@ mod test {
 
     #[tokio::test]
     async fn fetch() -> Result<()> {
+        let ctx = Context::as_root();
         let repo = Repo::in_memory().await?;
 
         sqlx::query!(
@@ -88,7 +89,7 @@ mod test {
         .execute(&repo.0)
         .await?;
 
-        let household = repo.fetch_household(1).await?;
+        let household = repo.fetch_household(&ctx, 1).await?;
         assert_eq!(household.id, 1);
         assert_eq!(household.address, "OCP Main Building");
         assert_eq!(household.members.len(), 1);

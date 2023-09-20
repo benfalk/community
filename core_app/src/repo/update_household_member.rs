@@ -14,7 +14,7 @@ pub struct UpdateHouseholdMember {
 }
 
 impl Repo {
-    pub async fn update_household_member(&self, update: &UpdateHouseholdMember) -> Result<()> {
+    pub async fn update_household_member(&self, _ctx: &Context, update: &UpdateHouseholdMember) -> Result<()> {
         let mut builder = QueryBuilder::new("UPDATE household_members SET ");
         let mut separator = builder.separated(", ");
 
@@ -67,6 +67,7 @@ mod test {
 
     #[tokio::test]
     async fn update() -> Result<()> {
+        let ctx = Context::as_root();
         let repo = Repo::in_memory().await?;
 
         sqlx::query!(
@@ -100,7 +101,7 @@ mod test {
             ..Default::default()
         };
 
-        repo.update_household_member(&update).await?;
+        repo.update_household_member(&ctx, &update).await?;
         let row = sqlx::query!("SELECT email, cell_number FROM household_members WHERE id = 1")
             .fetch_one(&repo.0)
             .await?;

@@ -8,7 +8,11 @@ pub struct CreateHousehold {
 }
 
 impl Repo {
-    pub async fn create_household(&self, household: &CreateHousehold) -> Result<Household> {
+    pub async fn create_household(
+        &self,
+        _ctx: &Context,
+        household: &CreateHousehold,
+    ) -> Result<Household> {
         let row = sqlx::query!(
             "
             INSERT INTO households
@@ -38,11 +42,12 @@ mod test {
 
     #[tokio::test]
     async fn create() -> Result<()> {
+        let ctx = Context::as_root();
         let repo = Repo::in_memory().await?;
         let create = CreateHousehold {
             address: "6422 Long Lane Drive".to_owned(),
         };
-        let household = repo.create_household(&create).await?;
+        let household = repo.create_household(&ctx, &create).await?;
         assert_eq!(household.id, 1);
         assert_eq!(household.address, "6422 Long Lane Drive");
         assert!(household.members.is_empty());
